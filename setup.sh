@@ -1,16 +1,16 @@
 
 sudo su
-apt-get -y -qqq update && apt-get -y -qqq upgrade
-apt-get -y -qqq install mc openssh-server curl software-properties-common
+apt-get -y update && apt-get -y upgrade
+apt-get -y install mc openssh-server curl software-properties-common
 
-apt-get -y -qqq install nginx
+apt-get -y install nginx
 systemctl stop nginx.service
 systemctl start nginx.service
 systemctl enable nginx.service
 
 add-apt-repository -y ppa:ondrej/php
-apt-get -y -qqq update
-apt-get -y -qqq install php8.0-fpm php8.0-mbstring php8.0-gd php8.0-intl php8.0-curl php8.0-zip php8.0-xml php8.0-redis php8.0-mysql php8.0-imagick
+apt-get -y update
+apt-get -y install php8.0-fpm php8.0-mbstring php8.0-gd php8.0-intl php8.0-curl php8.0-zip php8.0-xml php8.0-redis php8.0-mysql php8.0-imagick
 sed -i "s/file_uploads =.*/file_uploads = On/g" /etc/php/8.0/fpm/php.ini
 sed -i "s/allow_url_fopen =.*/allow_url_fopen = On/g" /etc/php/8.0/fpm/php.ini
 sed -i "s/memory_limit =.*/memory_limit = 256M/g" /etc/php/8.0/fpm/php.ini
@@ -23,7 +23,7 @@ systemctl stop php8.0-fpm.service
 systemctl start php8.0-fpm.service
 systemctl enable php8.0-fpm.service
 
-apt-get -y -qqq install mariadb-server
+apt-get -y install mariadb-server
 systemctl stop mariadb.service
 systemctl start mariadb.service
 systemctl enable mariadb.service
@@ -40,7 +40,7 @@ curl -sS https://getcomposer.org/installer -o composer-setup.php
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 cd /var/www
-COMPOSER_MEMORY_LIMIT=-1 composer create-project pimcore/demo pimcore
+COMPOSER_MEMORY_LIMIT=-1 COMPOSER_ALLOW_SUPERUSER=1 composer create-project pimcore/demo pimcore
 chown -R www-data:www-data /var/www/pimcore
 chmod -R 775 /var/www/pimcore
 
@@ -121,10 +121,9 @@ server {
     }
 }
 EOF
+
 ln -s /etc/nginx/sites-available/pimcore /etc/nginx/sites-enabled/
 systemctl reload nginx.service
 
-
 cd /var/www/pimcore
 ./vendor/bin/pimcore-install
-
