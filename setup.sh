@@ -54,8 +54,8 @@ server {
     client_max_body_size 100m;
     access_log  /var/log/access.log;
     error_log   /var/log/error.log error;
-    rewrite ^/cache-buster-(?:\d+)/(.*) /$1 last;
-    location ~* /var/assets/.*\.php(/|$) {
+    rewrite ^/cache-buster-(?:\d+)/(.*) /\$1 last;
+    location ~* /var/assets/.*\.php(/|\$) {
         return 404;
     }
     location ~* /\.(?!well-known/) {
@@ -63,20 +63,20 @@ server {
         log_not_found off;
         access_log off;
     }
-    location ~* (?:\.(?:bak|conf(ig)?|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)$ {
+    location ~* (?:\.(?:bak|conf(ig)?|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)\$ {
         deny all;
     }
     location ~* ^/admin/(adminer|external) {
-        rewrite .* /index.php$is_args$args last;
+        rewrite .* /index.php\$is_args\$args last;
     }
     location ~* .*/(image|video)-thumb__\d+__.* {
-        try_files /var/tmp/thumbnails$uri /index.php;
+        try_files /var/tmp/thumbnails\$uri /index.php;
         expires 2w;
         access_log off;
         add_header Cache-Control "public";
     }
-    location ~* ^(?!/admin)(.+?)\.((?:css|js)(?:\.map)?|jpe?g|gif|png|svgz?|eps|exe|gz|zip|mp\d|ogg|ogv|webm|pdf|docx?|xlsx?|pptx?)$ {
-        try_files /var/assets$uri $uri =404;
+    location ~* ^(?!/admin)(.+?)\.((?:css|js)(?:\.map)?|jpe?g|gif|png|svgz?|eps|exe|gz|zip|mp\d|ogg|ogv|webm|pdf|docx?|xlsx?|pptx?)\$ {
+        try_files /var/assets\$uri \$uri =404;
         expires 2w;
         access_log off;
         log_not_found off;
@@ -84,18 +84,18 @@ server {
     }
     location / {
         error_page 404 /meta/404;
-        try_files $uri /index.php$is_args$args;
+        try_files \$uri /index.php\$is_args\$args;
     }
-    location ~ ^/index\.php(/|$) {
+    location ~ ^/index\.php(/|\$) {
         send_timeout 1800;
         fastcgi_read_timeout 1800;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        try_files $fastcgi_script_name =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)\$;
+        try_files \$fastcgi_script_name =404;
         include fastcgi_params;
-        set $path_info $fastcgi_path_info;
-        fastcgi_param PATH_INFO $path_info;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        set \$path_info \$fastcgi_path_info;
+        fastcgi_param PATH_INFO \$path_info;
+        fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT \$realpath_root;
         fastcgi_pass php-pimcore10;
         internal;
     }
