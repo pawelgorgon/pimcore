@@ -1,5 +1,3 @@
-
-sudo su
 apt-get -y update && apt-get -y upgrade
 apt-get -y install mc openssh-server curl software-properties-common
 
@@ -40,11 +38,11 @@ curl -sS https://getcomposer.org/installer -o composer-setup.php
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 cd /var/www
-COMPOSER_MEMORY_LIMIT=-1 COMPOSER_ALLOW_SUPERUSER=1 composer create-project pimcore/demo pimcore
+COMPOSER_MEMORY_LIMIT=-1 COMPOSER_ALLOW_SUPERUSER=1 composer create-project pimcore/skeleton pimcore
 chown -R www-data:www-data /var/www/pimcore
 chmod -R 775 /var/www/pimcore
 
-tee -a /etc/nginx/sites-available/pimcore < EOF
+tee -a /etc/nginx/sites-available/pimcore <EOF
 upstream php-pimcore10 {
     server unix:/var/run/php/php8.0-fpm.sock;
 }
