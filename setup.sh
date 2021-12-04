@@ -42,7 +42,7 @@ COMPOSER_MEMORY_LIMIT=-1 COMPOSER_ALLOW_SUPERUSER=1 composer create-project pimc
 chown -R www-data:www-data /var/www/pimcore
 chmod -R 775 /var/www/pimcore
 
-tee -a /etc/nginx/sites-available/pimcore <EOF
+tee /etc/nginx/sites-available/pimcore <<EOF
 upstream php-pimcore10 {
     server unix:/var/run/php/php8.0-fpm.sock;
 }
