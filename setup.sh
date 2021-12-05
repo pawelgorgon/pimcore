@@ -37,6 +37,7 @@ EOF
 curl -sS https://getcomposer.org/installer -o composer-setup.php
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
+rm -rf /var/www/pimcore
 cd /var/www
 COMPOSER_MEMORY_LIMIT=-1 COMPOSER_ALLOW_SUPERUSER=1 composer create-project pimcore/skeleton pimcore
 chown -R www-data:www-data /var/www/pimcore
@@ -124,4 +125,13 @@ ln -s /etc/nginx/sites-available/pimcore /etc/nginx/sites-enabled/
 systemctl reload nginx.service
 
 cd /var/www/pimcore
-./vendor/bin/pimcore-install
+./vendor/bin/pimcore-install \
+    --admin-username admin \
+    --admin-password admin \
+    --mysql-username pimcore \
+    --mysql-password pimcore \
+    --mysql-database pimcore \
+    --no-interaction
+
+chown -R www-data:www-data /var/www/pimcore
+chmod -R 775 /var/www/pimcore
