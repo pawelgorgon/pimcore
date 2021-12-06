@@ -132,5 +132,9 @@ PIMCORE_INSTALL_MYSQL_USERNAME=pimcore \
 PIMCORE_INSTALL_MYSQL_PASSWORD=pimcore \
 ./vendor/bin/pimcore-install --mysql-database pimcore --no-interaction
 
+composer require pimcore/perspective-editor
+./bin/console pimcore:bundle:enable PimcorePerspectiveEditorBundle
+./bin/console pimcore:bundle:install PimcorePerspectiveEditorBundle
+
 chown -R www-data:www-data /var/www/pimcore
 chmod -R 775 /var/www/pimcore
