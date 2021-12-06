@@ -27,6 +27,7 @@ systemctl start mariadb.service
 systemctl enable mariadb.service
 mysql_secure_installation
 mysql -u root -p <<EOF
+DROP DATABASE IF EXISTS pimcore;
 CREATE DATABASE pimcore charset=utf8mb4;
 CREATE USER 'pimcore'@'localhost' IDENTIFIED BY 'pimcore';
 GRANT ALL ON pimcore.* TO 'pimcore'@'localhost';
