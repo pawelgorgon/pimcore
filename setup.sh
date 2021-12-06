@@ -122,17 +122,15 @@ server {
 }
 EOF
 
-ln -s /etc/nginx/sites-available/pimcore /etc/nginx/sites-enabled/
+ln -sfn /etc/nginx/sites-available/pimcore /etc/nginx/sites-enabled/
 systemctl reload nginx.service
 
 cd /var/www/pimcore
-./vendor/bin/pimcore-install \
-    --admin-username admin \
-    --admin-password admin \
-    --mysql-username pimcore \
-    --mysql-password pimcore \
-    --mysql-database pimcore \
-    --no-interaction
+PIMCORE_INSTALL_ADMIN_USERNAME=admin \
+PIMCORE_INSTALL_ADMIN_PASSWORD=admin \
+PIMCORE_INSTALL_MYSQL_USERNAME=pimcore \
+PIMCORE_INSTALL_MYSQL_PASSWORD=pimcore \
+./vendor/bin/pimcore-install --mysql-database pimcore --no-interaction
 
 chown -R www-data:www-data /var/www/pimcore
 chmod -R 775 /var/www/pimcore
